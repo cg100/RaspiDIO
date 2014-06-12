@@ -11,15 +11,22 @@ struct Radiostation rs[RADIOSTATION_COUNT];
 void init_mpd()
 {
 	int i = 0;
-	cur_volume = mpd_status_get_volume(conn);
+	struct mpd_status* st;
 
+	conn = mpd_connection_new("localhost", 6600, 0);
+	if (conn == NULL)
+		return;
+
+	mpd_send_status(conn);
+	st = mpd_recv_status(conn);
+	cur_volume = mpd_status_get_volume(st);
 
 	rs[0].RadioURL = "http://1live.akacast.akamaistream.net/7/706/119434/v1/gnl.akacast.akamaistream.net/1live";
 	rs[0].RadioName = "1Live";
 	rs[0].ID = 1;
 
 	mpd_send_clear(conn);
-	mpd_finish_response(conn);
+	mpd_response_finish(conn);
 
 	for(i = 0; i < RADIOSTATION_COUNT; i++)
 	{
@@ -27,7 +34,7 @@ void init_mpd()
 	}
 
 	mpd_send_play(conn);
-	mpd_finish_response(conn);
+	mpd_response_finish(conn);
 }
 
 void start_mpd()
