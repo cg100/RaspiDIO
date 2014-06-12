@@ -1,4 +1,4 @@
-#ifdef HAVE_CONFIG_H
+/*#ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
@@ -175,3 +175,4 @@ void deinit_lirc(ClientData clientData) {
   lirc_deinit();
   free(data);
 }
+*/

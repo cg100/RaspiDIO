@@ -23,6 +23,8 @@ extern void lcd_setup4b();
 
 extern void lcd_setup4b_schnatterente();
 
+extern void lcd_setup4b_ks0066();
+
 extern void lcd_print(char* c);
 
 extern void lcd_line_print(lcd_line line, char* c);

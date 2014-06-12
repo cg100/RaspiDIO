@@ -334,6 +334,7 @@ void lcd_write_data(int8_t data)
 
 void lcd_send_data(int rs, uint8_t data)
 {
+	/*
 	printDebug("lcd_send_data:");
 
 	debugPrint(DEBUG_DEBUG, "RS: ");
@@ -345,15 +346,17 @@ void lcd_send_data(int rs, uint8_t data)
 	printDebug("\n");
 
 	printDebug("{");
+	*/
 
 	lcd_send_data4b(rs, (data & 0xf0) >> 4);
 	lcd_send_data4b(rs, data & 0x0f);
 
-	printDebug("}");
+	//printDebug("}");
 }
 
 void lcd_send_data4b(int rs, uint8_t data)
 {
+	/*
 	printDebug("lcd_send_data4b:");
 
 	debugPrint(DEBUG_DEBUG, "RS: ");
@@ -363,6 +366,7 @@ void lcd_send_data4b(int rs, uint8_t data)
 	debugPrint(DEBUG_DEBUG, "DATA: ");
 	printDebugHex(data);
 	printDebug("");
+	*/
 
 	digitalWrite(LCD_RS, rs != 0);
 
@@ -373,11 +377,13 @@ void lcd_send_data4b(int rs, uint8_t data)
 
 	lcd_flush();
 
+	/*
 	if(lcd_debug == 1)
 	{
 		printDebug("Druecke eine beliebige Taste...\n");
 		getchar();
 	}
+	*/
 }
 
 void lcd_flush()

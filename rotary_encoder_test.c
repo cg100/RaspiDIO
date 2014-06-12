@@ -1,4 +1,4 @@
-#include "rotaryencoder.h"
+/*#include "rotaryencoder.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -29,3 +29,4 @@ while(1)
 
 return ;
 }
+*/
