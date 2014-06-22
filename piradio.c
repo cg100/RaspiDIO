@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 
 	menu_item_add_subitem(item_main_menu, create_menu_item("Start", start_action, 0));
 	menu_item_add_subitem(item_main_menu, create_menu_item("Stop", stop_action, 0));
-	menu_item_add_subitem(item_main_menu, create_menu_item("Zurück", now_playing, 0));
+	menu_item_add_subitem(item_main_menu, create_menu_item("Zurueck", now_playing, 0));
 	//menu_item_add_subitem(item_main_menu, create_menu_item("Hallo4", tmp_action, 0));
 	//menu_item_add_subitem(item_main_menu, create_menu_item("Hallo5", tmp_action, 0));
 
@@ -142,5 +142,6 @@ int main(int argc, char **argv)
 		delay(100);
 	}
 
+	close_mpd();
 	return 0;
 }

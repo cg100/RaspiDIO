@@ -11,6 +11,7 @@ int numberofencoders = 0;
 
 void updateEncoders()
 {
+	printf("Interrupt Dreh \n");
 	struct encoder* encoder = &default_encoder;
         int MSB = digitalRead(encoder->pin_a);
         int LSB = digitalRead(encoder->pin_b);
@@ -25,7 +26,12 @@ void updateEncoders()
 
 void updateButton()
 {
-	default_encoder.button_pressed=1;
+	//struct encoder* encoder = &default_encoder;
+	//int bit = digitalRead(encoder->pin_button);
+	//if(bit == 0)
+		default_encoder.button_pressed=1;
+
+	printf("Interrupt Knopf \n");
 }
 
 

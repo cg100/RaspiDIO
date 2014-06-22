@@ -67,7 +67,7 @@ int get_volume()
 void change_radiostation(int id)
 {
 	mpd_send_play_pos(conn, id);
-	mpd_finish_response(conn);
+	mpd_response_finish(conn);
 }
 
 char** get_senderlist()
@@ -88,9 +88,9 @@ char** get_senderlist()
 void close_mpd()
 {
 	mpd_send_stop(conn);
-	mpd_finish_response(conn);
+	mpd_response_finish(conn);
 	mpd_send_clear(conn);
-	mpd_finish_response(conn);
+	mpd_response_finish(conn);
 	mpd_connection_free(conn);
 }
 
