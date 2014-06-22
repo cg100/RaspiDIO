@@ -310,7 +310,7 @@ void lcd_function_set(int use8bit, int use2Lines, int use5x11Font)
 
 /**
  * min_address: 0
- * max_address: 79
+ * max_address: 7f
  */
 void lcd_set_display_data_ram_address(int8_t address)
 {

@@ -24,26 +24,19 @@ void menu_draw()
 	const lcd_line lines[] = {LINE1, LINE2, LINE3, LINE4};
 	int start_index = selected_menu.selection_index - 1;
 	int i = 0;
-	const int selTextLength = 20;
-	char selectedText[selTextLength];
+	const int selTextLength = 21;
+	char selectedText[21] = { 0x7e /*Pfeil*/, ' ' };
 	int submenu_length = menu_item_submenu_length(selected_menu.current_menu);
 	menu_item* item = 0;
 
 	if(!selected_menu.active) return;
 
 	//Text des selektierten Items modifizieren
-	memset(&selectedText, 0, selTextLength * sizeof(char));
-
-	selectedText[0] = 0x7e; //Pfeil
-	selectedText[1] = ' ';
+	memset(selectedText + 2, 0, (selTextLength - 2) * sizeof(char));
 
 	item = menu_item_get_sub_item(selected_menu.current_menu, selected_menu.selection_index);
 
-	//item text anfügen
-	for(i = 2; i < (selTextLength - 1) && item->text[i - 2]; i++)
-	{
-		selectedText[i] = item->text[i - 2];
-	}
+	strncat(selectedText + 2, item->text, selTextLength - 3);
 
 	//start index modifizieren
 	if((start_index + 4) > submenu_length)
@@ -85,7 +78,7 @@ void menu_dec()
 
 void menu_inc()
 {
-	if((selected_menu.selection_index + 1) >= menu_item_submenu_length(selected_menu.current_menu)) return;
+	if((selected_menu.selection_index + 1) >= menu_item_submenu_length(selected_menu.current_menu) || !selected_menu.active) return;
 
 	selected_menu.selection_index++;
 	menu_draw();
