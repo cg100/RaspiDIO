@@ -1,0 +1,13 @@
+\section{LCD-Display}
+
+Wir verwenden ein vierzeiliges LCD Display mit mit der Modellnummer "'YM2004A"' und dem Controller "'ks0066"'.\\
+\\
+Der Controller wird imt 4-Bit Modus betrieben. Somit sparen wir uns 4 Pins, welche für andere Zwecke verwendet werden können.\\
+\\
+Da wir keine Daten vom Display lesen wollen setzen wir den R/W Pin des Displays immer auf Ground. Dies ist sehr wichtig, da die GPIO Pins nur mit einer Spannung von 3,3V arbeiten und das Display 5V ausgeben würde.\\
+\\
+Die wichtigste Funktion in unserem Programm ist lcd\_send\_data4b. Diese Funktion nimmt die Parameter rs und data an. Falls rs ungleich 0 ist wird der RS-Pin auf HIGH gelegt. Bei data wird nur das untere Nibble beachtet und auf den Pins D4 bis D7 ausgegeben. Anschließend wird mit der Funktion lcd\_flush der Enable-Pin kurz auf HIGH und dann wieder auf LOW gesetzt.\\
+\\
+Um ein ganzes Byte an das Display zu senden wird die Funktion lcd\_send\_data genutzt. Diese sendet mit Hilfe der beschriebenen Funktion lcd\_send\_data4b zuerst das obere Nibble an das Display und anschließend das untere.\\
+\\
+Alle anderen Funktionen nutzen diese beiden Funktionen. Es gibt C-Funktionen, die alle Funktionen des Displays umsetzen, welche im Datenblatt des KS6600 beschrieben werden. Zusätzlich gibt es eine Funktion zum Initialisieren des Displays und Funktionen zum Schreiben von Strings. Beim Schreiben eines Strings kann optional auch die Zeile übergeben werden, in welche der Text geschrieben werden soll. Dazu wird zuerst die Cursor Adresse für die jeweilige Zeile an das Display geschickt und anschließend werden über eine Schleife die einzelnen Zeichen gesendet.

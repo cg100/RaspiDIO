@@ -1,0 +1,68 @@
+\documentclass[12pt,a4paper,titlepage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,includeheadfoot]{geometry}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage[absolute]{textpos}
+\usepackage{color}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{setspace}
+
+%Farben
+\usepackage{xcolor}
+\definecolor{tdgrey}{RGB}{75,75,75}
+\definecolor{cppgreen}{RGB}{0, 128, 0}
+\definecolor{cppred}{RGB}{163,21,21}
+\definecolor{lighgrey}{RGB}{250,250,250}
+
+%Links
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	citecolor=black,
+	urlcolor=black,
+	allbordercolors={0 0 0}
+}
+
+%Kopf- und Fußzeile
+\setlength{\headheight}{23.pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{SinQ\\\nouppercase{\leftmark}}
+\fancyhead[R]{\includegraphics[height=23pt]{WH_Logo.jpg}}
+\fancyfoot[C]{\thepage}
+
+%Quellcode Listings:
+\usepackage{listings}
+\lstset{
+	language=C++,
+	backgroundcolor=\color{lighgrey},
+	basicstyle=\ttfamily,
+	keywordstyle=\color{blue},
+	commentstyle=\color{cppgreen},
+	stringstyle=\color{cppred},
+	tabsize=3
+}
+
+\lstset{literate=%
+{Ö}{{\"O}}1 
+{Ä}{{\"A}}1 
+{Ü}{{\"U}}1 
+{ß}{{\ss}}2 
+{ü}{{\"u}}1 
+{ä}{{\"a}}1 
+{ö}{{\"o}}1
+}
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\noindent\colorbox{gray}{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}

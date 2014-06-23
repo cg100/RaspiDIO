@@ -1,0 +1,5 @@
+\section{Probleme}
+
+\subsection{Display}
+
+Wir hatten zunächst ein fehlerhaftes Display, auf dem, wenn überhaupt, nur Artefakte angezeigt wurden. Zur Sicherstellung, dass das Problem wirklich am Display liegt, haben wir mehrere Praktika gebraucht. Wir haben schließlich mit einer Oszilloskop überprüft, ob an allen Pins wirklich genau die Signale übertragen werden, die wir dort erwarten. Dazu wurden in die Funktion lcd\_send\_data4b einige Zeilen hinzugefügt, die bewirken, dass das Programm am Ende dieser Funktion anhält und erst durch einen Tastenanschlag fortfährt. Am Oszilloskop wurden dann der zu prüfende Pin und der Enable-Pin angeschlossen. Das Oszilloskop hat anschließen den Moment aufgenommen, bei dem eine positive Flanke am Enable-Pin gemessen wurde. Somit konnten wir messen, ob wirklich die gewollten Signale übertragen wurden.

@@ -1,0 +1,52 @@
+\section{Menü}
+
+Das Menü wird bei uns über eine Baumstruktur aus menu\_item Objekten realisiert.
+
+\begin{lstlisting}[label=struct_menu_item,caption=menu\_item Struktur]
+typedef struct _menu_item {
+	char* text;
+	struct _menu_item* submenu;
+	struct _menu_item* next_item;
+	void (*action)(struct _menu_item* data);
+	void* data;
+} menu_item;
+\end{lstlisting}
+
+Jeder Eintrag besitzt einen Text und kann auf ein Nachfolgeelement (next\_item) zeigen. Des Weiteren kann der Eintrag auf das erste Element eines Untermenüs zeigen (submenu). Der Funktionszeiger action wird aufgerufen, wenn dieser Eintrag ausgewählt werden. Als Parameter wird ein Zeiger auf das aufgerufene Element übergeben. Hier könnte z.B. das Untermenü angezeigt werden. Optional kann ein Element einen Zeiger auf beliebige Daten speichern. Hierbei könnte es sich z.B. um einen Pfad zu einer MP3-Datei handeln, die beim Aufruf der action-Funktion abgespielt werden soll.\\
+\\
+Global gibt es eine einziges Objekt der Struktur menu.
+
+\begin{lstlisting}[label=struct_menu,caption=menu Struktur]
+typedef struct _menu {
+	menu_item* current_menu;
+	int selection_index;
+	char active;
+} menu;
+\end{lstlisting}
+
+In der menu Struktur befindet sich der Zeiger auf das Menü-Element, dessen Untermenü im Moment angezeigt wird.\\
+Der Integer selection\_index gibt des Index des aktuell ausgewählten Elementes im Untermenü von current\_menu an.\\
+Wenn die Variable active gleich 0 ist, reagiert das Menü nicht mehr auf Eingaben und wird auch nicht mehr neu gezeichnet. Sie kann somit auf 0 gesetzt werden, wenn eine Zeit lang ein anderes Modul das Display nutzen soll.
+
+\subsection{Funktionen}
+
+Allgemeine Menü-Funktionen:\\
+\begin{tabularx}{\textwidth}{ll}
+	init\_menu & Initialisierung \\
+	menu\_draw & Zeichnet das Menü auf dem Display\\
+	menu\_dec & Wählt den vorherigen Menü-Eintrag aus\\
+	menu\_inc & Wählt den nächsten Menü-Eintrag aus\\
+	menu\_action & Führt die action-Funktion des ausgewählten Eintrags aus.
+\end{tabularx}\\
+\\
+Funktionen für Menü-Einträge:\\
+\begin{tabularx}{\textwidth}{ll}
+	create\_menu\_item & Erzeugt einen neuen Menü Eintrag. \\
+	destroy\_menu\_item & Gibt Speicher eines Eintrags, dessen Nachfolger und das Untermenü frei.\\
+	menu\_item\_find\_item\_by\_data & Sucht einen Eintrag im Baum anhand des data-Zeigers\\
+	menu\_item\_remove\_item & Löscht einen Eintrag aus dem Menü-Baum\\
+	menu\_item\_submenu\_length & Gibt die Länge eines Untermenüs zurück\\
+	menu\_item\_insert\_subitem & Fügt Eintrag im Untermenü bei angegebenem Index ein\\
+	menu\_item\_add\_subitem & Fügt Eintrag an das Ende eines Untermenüs an\\
+	menu\_item\_get\_sub\_item & Gibt Eintrag eines Untermenüs an einem bestimmten Index zurück 
+\end{tabularx}

@@ -1,0 +1,8 @@
+\section{Entwicklungsumgebung}
+
+Um für den Raspberry Pi zu entwickeln verwenden wir Eclipse unter Ubuntu. Da wir nicht auf dem Pi programmieren wollen benötigten wir einen Cross Compiler. Zum Einrichten dieser Funktionalität haben wir folgendes Tutorial verwendet:\\
+\href{http://hertaville.com/2012/09/28/development-environment-raspberry-pi-cross-compiler/}{http://hertaville.com/2012/09/28/development-environment-raspberry-pi-cross-compiler/}\\
+\\
+In diesem Tutorial wird auch beschrieben, wie man mit Eclipse eine SSH Verbindung zum Raspberry Pi herstellen kann und die kompilierten Dateien somit direkt aus Eclipse heraus auf die Pi kopieren und starten kann.\\
+\\
+Zu Beginn des Projektes hatten wir Probleme die kompilierten Dateien zum laufen zu bekommen. Der Fehler war, dass wir den Cross-Compiler gcc-linaro-arm-linux-gnueabihf-raspbian verwendet haben. Das "'hf"' in gnueabihf bedeutet, dass der Code für eine Betriebssystemversion kompiliert wird, welche hardwareunterstützte Floatingpoint-Berechnungen unterstützt. Das Betriebssystem, welches wir zu dem Zeitpunkt verwendet haben, hat dies nicht unterstützt. Wir haben daraufhin ein aktuelles Raspbian auf dem Raspberry Pi installiert. Alternativ kann der Cross-Compiler arm-bcm2708-linux-gnueabi verwendet werden, um den Code für ein Betriebssystem zu kompilieren, welches das Feature nicht unterstützt.
