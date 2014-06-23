@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <wiringPi.h>
 #include "menu.h"
 #include "helper.h"
@@ -30,26 +31,34 @@ void stop_action(menu_item* item)
 void now_playing(menu_item* item)
 {
 
+	//LCD Clear
+	lcd_display_clear();
+
+
 	char *title = get_current_songtitle();
 	lcd_line_print(LINE1, title);
 
+
 	while(1)
 	{
+
 		//aktuellen Titel ausgeben, wenn er sich geändert hat:
 		if(strcmp(title,get_current_songtitle()) != 0)
 		{
+			//free(title);
+			lcd_display_clear();
 			title = get_current_songtitle();
 			lcd_line_print(LINE1, title);
 		}
 		direction dir = getDirection(encoder);
 
-		//Lauter
-		if(dir==DIR_LEFT)
-			set_volume(10);
-
 		//Leiser
+		if(dir==DIR_LEFT)
+			set_volume_rel(-5);
+
+		//Lauter
 		if(dir==DIR_RIGHT)
-			set_volume(-10);
+			set_volume_rel(5);
 
 		//Menü aufrufen
 		if(getButtonPressed(encoder)==1)
@@ -60,6 +69,7 @@ void now_playing(menu_item* item)
 		delay(100);
 
 	}
+	//free(title);
 }
 
 int main(int argc, char **argv)
@@ -98,7 +108,7 @@ int main(int argc, char **argv)
 
 	delay(3000);
 
-	encoder = setupencoder(9, 7, 8);
+
 	init_mpd();
 
 
@@ -119,18 +129,24 @@ int main(int argc, char **argv)
 	printDebug("Starte Hauptprogramm");
 
 
-
+	encoder = setupencoder(9, 7, 8);
 	while(1)
 	{
 		//Hauptprogramm
+
 
 		//checkDirection
 		direction dir = getDirection(encoder);
 
 		if(dir==DIR_LEFT)
+		{
 			menu_dec();
+
+		}
 		if(dir==DIR_RIGHT)
+		{
 			menu_inc();
+		}
 
 		//checkButton
 		if(getButtonPressed(encoder)==1)
@@ -139,7 +155,9 @@ int main(int argc, char **argv)
 			menu_action();
 		}
 
-		delay(100);
+
+
+		delay(200);
 	}
 
 	close_mpd();

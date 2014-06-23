@@ -33,8 +33,8 @@ void init_mpd()
 		mpd_run_add(conn, rs[i].RadioURL);
 	}
 
-	mpd_send_play(conn);
-	mpd_response_finish(conn);
+	//mpd_send_play(conn);
+	//mpd_response_finish(conn);
 }
 
 void start_mpd()
@@ -51,10 +51,18 @@ void stop_mpd()
 
 void set_volume(int vol)
 {
-	if(vol < 2)
-		cur_volume = vol;
-	else
-		cur_volume += vol;
+	if((vol < 0) || (vol > 100))
+		return;
+	cur_volume = vol;
+	mpd_send_set_volume(conn, cur_volume);
+	mpd_response_finish(conn);
+}
+
+void set_volume_rel(int vol)
+{
+	if((cur_volume + vol) > 100 || (cur_volume + vol) < 0)
+		return;
+	cur_volume += vol;
 	mpd_send_set_volume(conn, cur_volume);
 	mpd_response_finish(conn);
 }

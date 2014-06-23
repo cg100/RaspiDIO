@@ -26,5 +26,6 @@ void change_radiostation(int id);
 char** get_senderlist();
 void close_mpd();
 char* get_current_songtitle();
+void set_volume_rel(int vol);
 
 #endif /* RADIO_H_ */

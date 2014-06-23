@@ -182,7 +182,7 @@ void lcd_setup4b_ks0066()
 	delay(2);
 }
 
-void lcd_print(char* c)
+void lcd_print_n(char* c, uint32_t n)
 {
 	if(c == 0) return;
 
@@ -190,9 +190,14 @@ void lcd_print(char* c)
 	printDebug(c);
 	printDebug("");
 
-	for(;*c;c++) lcd_write_data(*c);
+	for(;*c && n;c++, n--) lcd_write_data(*c);
 
 	//lcd_cursor_shift(1);
+}
+
+void lcd_print(char* c)
+{
+	lcd_print_n(c, 0xffffffff);
 }
 
 void lcd_line_print(lcd_line line, char* c)
@@ -210,7 +215,7 @@ void lcd_line_print(lcd_line line, char* c)
 
 	lcd_set_display_data_ram_address(address);
 
-	lcd_print(c);
+	lcd_print_n(c, 20);
 }
 
 void lcd_display_clear()
