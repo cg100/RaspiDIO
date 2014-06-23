@@ -4,7 +4,7 @@
 #include "mpd/client.h"
 #include "radio.h"
 
-#define RADIOSTATION_COUNT 2
+#define RADIOSTATION_COUNT 3
 
 struct mpd_connection *conn = NULL;
 
@@ -31,6 +31,14 @@ void init_mpd()
 	rs[1].RadioURL = "http://108.61.73.117:10002";
 	rs[1].RadioName = "181.fm - The Eagle";
 	rs[1].ID = 2;
+
+
+
+
+	rs[2].RadioURL = "http://mp3.webradio.antenne.de:80";
+	rs[2].RadioName = "Antenne Bayern";
+	rs[2].ID = 3;
+
 
 
 	mpd_send_clear(conn);
@@ -154,4 +162,9 @@ char* get_current_songartist()
 	}
 
 	return cur_song;
+}
+
+char* get_current_station(int i)
+{
+	return rs[i].RadioName;
 }

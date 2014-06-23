@@ -49,8 +49,24 @@ void start_action(menu_item* item)
 void change_action(menu_item* item)
 {
 	printInfo(item->text);
-	radiostation=1;
-	change_radiostation(radiostation);
+	if(radiostation==0)
+	{
+		radiostation=1;
+		change_radiostation(radiostation);
+		return;
+	}
+	if(radiostation==1)
+	{
+		radiostation=2;
+		change_radiostation(radiostation);
+		return;
+	}
+	if(radiostation==2)
+	{
+		radiostation=0;
+		change_radiostation(radiostation);
+		return;
+	}
 }
 
 void stop_action(menu_item* item)
@@ -66,7 +82,7 @@ void now_playing(menu_item* item)
 	lcd_display_clear();
 
 
-	//lcd_line_print(LINE1, rs[radiostation]->RadioName);
+	lcd_line_print(LINE1, get_current_station(radiostation));
 
 	char *title = get_current_songtitle();
 	lcd_line_print(LINE2, title);
