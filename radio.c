@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "mpd/client.h"
 #include "radio.h"
 
-#define RADIOSTATION_COUNT 1
+#define RADIOSTATION_COUNT 2
 
 struct mpd_connection *conn = NULL;
 
@@ -24,6 +26,12 @@ void init_mpd()
 	rs[0].RadioURL = "http://1live.akacast.akamaistream.net/7/706/119434/v1/gnl.akacast.akamaistream.net/1live";
 	rs[0].RadioName = "1Live";
 	rs[0].ID = 1;
+
+
+	rs[1].RadioURL = "http://108.61.73.117:10002";
+	rs[1].RadioName = "181.fm - The Eagle";
+	rs[1].ID = 2;
+
 
 	mpd_send_clear(conn);
 	mpd_response_finish(conn);
@@ -82,15 +90,15 @@ char** get_senderlist()
 {
 	int i = 0;
 
-	char** radiostations;
-	radiostations = malloc(RADIOSTATION_COUNT * sizeof(char*));
+	char** radiostations = 0;
+	radiostations = (char**)malloc(RADIOSTATION_COUNT * sizeof(char*));
 
 	for(i = 0; i < RADIOSTATION_COUNT; i++)
 	{
 		radiostations[i] = rs[i].RadioName;
 	}
 
-	return &radiostations;
+	return radiostations;
 }
 
 void close_mpd()
@@ -106,16 +114,41 @@ char* get_current_songtitle()
 {
 	struct mpd_song* song;
 	char* title;
-	char* cur_song;
+	char* cur_song = 0;
 
 	song = mpd_run_current_song(conn);
-	cur_song = malloc(sizeof(char*));
 
 	if (song != NULL) {
-		title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
+		title = (char*)mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
 
 		if(title != NULL)
+		{
+			cur_song = (char*)calloc(strlen(title), sizeof(char));
 			strcpy(cur_song, title);
+		}
+
+		mpd_song_free(song);
+	}
+
+	return cur_song;
+}
+
+char* get_current_songartist()
+{
+	struct mpd_song* song;
+	char* title;
+	char* cur_song = 0;
+
+	song = mpd_run_current_song(conn);
+
+	if (song != NULL) {
+		title = (char*)mpd_song_get_tag(song, MPD_TAG_ARTIST, 0);
+
+		if(title != NULL)
+		{
+			cur_song = (char*)calloc(strlen(title), sizeof(char));
+			strcpy(cur_song, title);
+		}
 
 		mpd_song_free(song);
 	}

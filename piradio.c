@@ -7,6 +7,7 @@
 #include "lcdpi.h"
 #include "rotaryencoder.h"
 #include "radio.h"
+#include <time.h>
 
 struct encoder *encoder;
 
@@ -20,6 +21,12 @@ void start_action(menu_item* item)
 {
 	printInfo(item->text);
 	start_mpd();
+}
+
+void change_action(menu_item* item)
+{
+	printInfo(item->text);
+	change_radiostation(1);
 }
 
 void stop_action(menu_item* item)
@@ -36,18 +43,26 @@ void now_playing(menu_item* item)
 
 
 	char *title = get_current_songtitle();
+
 	lcd_line_print(LINE1, title);
+
+
+	printf("%s\n", title);
+
+
+
 
 
 	while(1)
 	{
 
 		//aktuellen Titel ausgeben, wenn er sich geändert hat:
-		if(strcmp(title,get_current_songtitle()) != 0)
+		if((strcmp(title,get_current_songtitle()) != 0) )
 		{
-			//free(title);
+			free(title);
 			lcd_display_clear();
 			title = get_current_songtitle();
+			printf("%s\n", title);
 			lcd_line_print(LINE1, title);
 		}
 		direction dir = getDirection(encoder);
@@ -69,7 +84,7 @@ void now_playing(menu_item* item)
 		delay(100);
 
 	}
-	//free(title);
+	free(title);
 }
 
 int main(int argc, char **argv)
@@ -120,7 +135,7 @@ int main(int argc, char **argv)
 	menu_item_add_subitem(item_main_menu, create_menu_item("Start", start_action, 0));
 	menu_item_add_subitem(item_main_menu, create_menu_item("Stop", stop_action, 0));
 	menu_item_add_subitem(item_main_menu, create_menu_item("Zurueck", now_playing, 0));
-	//menu_item_add_subitem(item_main_menu, create_menu_item("Hallo4", tmp_action, 0));
+	menu_item_add_subitem(item_main_menu, create_menu_item("Sender wechseln", change_action, 0));
 	//menu_item_add_subitem(item_main_menu, create_menu_item("Hallo5", tmp_action, 0));
 
 	printDebug("Zeichne Menue...");
