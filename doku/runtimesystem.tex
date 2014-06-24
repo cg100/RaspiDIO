@@ -1,0 +1,15 @@
+\section{Laufzeitumgebung}
+\subsection{Raspbian}
+Als Betriebssystem auf dem Raspberry Pi verwenden wir Raspbian. Dies ist eine speziell angepasste Version für den Raspberry Pi basierend auf dem Linux Betriebssystems Debian.\\
+\subsubsection{Installation}
+Zur Installation von Raspbian haben wir folgendes Tutorial verwendet:\\
+\url{http://jankarres.de/2012/08/raspberry-pi-raspbian-installieren/}
+\subsection{mpd}
+mpd ist ein Musikplayer, der das Abspielen von Musik von verschiedenen Dateiformaten unterstützt (MP3-, Ogg Vorbis-, FLAC-, AAC-, Mod- oder WAV-Dateien). Des Weiteren ist es möglich Streams in den genannten Formaten zu empfangen und abzuspielen. Gesteuert wird der Player mithilfe eines Clients, der separat installiert werden muss. Hier gibt es verschiedene Clients zur Auswahl. Es gibt sowohl Clients mit grafischer Benutzeroberfläche, als auch kleine Clients, die mit der Kommandozeile gesteuert werden. In diesem Projekt  verwenden wir eine Bibliothek, die Client-Funktion bereitstellt. Diese Bibliothek ist in C geschrieben, sodass wir diese in unserem Projekt gut einsetzen können. Da es sich um eine Bibliothek handelt, welche im Projekt eingebunden ist, muss nichts installiert werden. Wir verwenden den Player und die Client-Bibliothek, um Radiostreams zu empfangen und abzuspielen.
+	
+\subsubsection{Installation}
+Die Installation des mpd ist relativ einfach, da sich die Server-Software im Software-Repositories von Ubuntu (Entwicklungssystem) und Rasbian (Betriebssystem des Raspberry Pi) befinden. Um den Player zu Installieren muss man lediglich folgenden Befehl in die Kommandozeile eingegeben:\\
+sudo apt-get install mpd
+
+\subsubsection{mpd testen}
+Um zu Überprüfen, ob der mpd-Server funktioniert, kann man sich beispielweise mpc herunterladen. Diesen kann man über die Kommandozeile mittels "`sudo apt-get mpc"' installieren. mpc ist ein Client für die mpd, welcher über die Kommandozeilen gesteuert wird. Nach der Installation kann man verschiedene Befehle wie z.B. mpc eintippen und dieser gibt den aktuellen Status des mpd-Servers zurück.

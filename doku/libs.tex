@@ -19,3 +19,6 @@ Um einen Pin ein- oder auszuschalten muss die Funktion digitalWrite genutzt werd
 \\
 Des Weiteren stellt die Bibliothek delay Funktionen zur Verzögung des Programms zur Verfügung.
 
+\subsection{libmpdclient}
+Um auf den mpd des Linux-Systems als Client zuzugreifen, verwenden wir eine Client-Bibliothek die sich "`libmpdclient"' nennt. Diese bietet die Möglichkeit, vorgefertigte Kommandos (z.B. Play und Pause) durch Aufrufen bestimmter Funktionen auszuführen oder direkt Befehle zum Server zu schicken. Diese können als String an eine Funktion übergeben werden.\\\\
+Um die Bibliothek in unserem Projekt verwenden zu können, mussten wir zuerst die Bibliothek auf dem Raspberry Pi kompilieren, damit diese auf ARM Prozessoren funktioniert. Zum Kompilieren konnte ein Buildscript verwendet werden, welches mit der Bibliothek mitgeliefert wurde. Dieses Buildscript haben wir auf dem Raspberry Pi ausgeführt.
