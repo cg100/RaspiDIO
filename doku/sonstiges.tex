@@ -1,0 +1,41 @@
+\section{Sonstiges}
+\subsection{Automatischer Programmstart}
+Damit nach dem Booten des Linux Betriebssystems RaspiDIO sofort automatisch gestartet wird, wurde ein Startup-Skript angelegt.
+\begin{lstlisting}[label=startup,caption=/etc/init.d/raspidio]
+#! /bin/sh
+# /etc/init.d/raspidio
+
+touch /var/lock/raspidio
+
+case "$1" in
+start)
+echo "Starting RaspiDIO..."
+/home/pi/PiRadio2> /dev/null &
+;;
+stop)
+echo "Killing RaspiDIO ..."
+killall PiRadio2
+;;
+*)
+echo "Usage: /etc/init.d/raspidio start|stop}"
+exit 1
+;;
+esac
+exit 0
+\end{lstlisting}
+Dieses muss dann mit \\
+"`chmod 755 /etc/init.d/raspidio"'\\
+ausführbar gemacht werden und mittels \\
+"`update-rc.d raspidio defaults"' \\
+in die Liste der beim Systemstart ausgeführten Programme eingetragen werden..
+\subsection{SD-Karte klonen}
+Die SD-Karte lässt sich unter Mac OS X mit dem Kommandozeilenbefehl dd klonen und Wiederherstellen.
+\begin{lstlisting}[label=clone,caption=Klonen und Wiederherstellen der SD-Karte]
+//Inhalt von SD-Karte auf dem Desktop speichern
+sudo dd if=/dev/disk1 of=~/Desktop/raspberrypi.dmg
+
+//Image auf SD-Karte wiederherstellen
+diskutil unmountDisk /dev/disk1
+sudo newfs_msdos -F 16 /dev/disk1
+sudo dd if=~/Desktop/raspberrypi.dmg of=/dev/disk1
+\end{lstlisting}

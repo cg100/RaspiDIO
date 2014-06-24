@@ -1,1 +1,22 @@
 \section{Zusammenfassung}
+Mit dem RaspiDIO soll der Anwender in der Lage sein, beliebige Internetradio Stationen zu hören. Auf einem LCD Bildschirm soll der aktuelle Radiosender, der Interpret und der Titel, sowie die aktuelle Uhrzeit angezeigt werden.
+\newline
+Das Radio soll mit einer Infrarot-Fernbedienung und mit einem Drehimpulsgeber mit Taster gesteuert werden können.
+\newline
+Die Lautstärke soll sich durch drehen am Impulsgeber oder an der Fernbedienung ändern lassen. Beim drücken des Drehimpulsgeber soll sich ein Menü öffnen, in dem der User den Sender wechseln, sowie Systemeinstellungen ändern kann.
+Über den Netzwerkanschluss soll die Senderliste aktualisiert werden können.
+
+
+\subsection{Implementations-Spezifikation}
+Das Internet-Radio soll mit einem Raspberry Pi realisiert werden. Dieser Einplatinen-Computer bietet USB-Anschlüsse, einen Netzwerk-Anschluss, HDMI und Video Ausgänge, einen analogen Ton Ausgang und einige I/O-Anschlüsse.
+An die I/O-Anschlüsse soll ein HD44780 kompatibles 4x20 Zeichen LCD-Display angeschlossen werden. Dabei soll der 4-Bit Modus des LCD-Controllers benutzt werden um I/O Ports zu sparen.
+\newline
+Dazu wird an die I/O Pins noch der Drehimpulsgeber und ein TSOP31238 Infrarot Empfänger angeschlossen.
+\newline
+Verschiedene Fernbedienungen sollen in der Benutzeroberfläche angelernt werden können.
+\newline
+Als Stromversorgung kommt ein 5 Volt Stecker-Netzteil mit Micro-USB Anschluss zum Einsatz.
+\newline
+Das Internet-Radio soll mit der Programmiersprache C programmiert werden. Als Betriebssystem wird das Linux System Raspbian benutzt, das auf Debian basiert. Dieses befindet sich auf einer SD-Karte, von der auch gebootet wird.
+\newline
+Es sollen Bibliotheken zur Ansteuerung der Hardwarekomponenten LCD, Infrarot und Drehimpulsgeber erstellt werden, die vom Hauptprogramm genutzt werden.
