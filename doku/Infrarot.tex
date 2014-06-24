@@ -1,1 +1,103 @@
 \section{Infrarot}
+Zur Benutzereingabe steht auch eine Infrarot-Fernbedienung sowie ein Infrarot-Empfänger zur Verfügung. 
+
+\subsection{Hardware}
+Der Infrarot-Empfänger TSOPXXXX wird auch an die GPIOs des Raspberrys angeschlossen. 
+\newline
+Es wird nur ein Eingangspin benötigt. Wir haben den Empfänger an GPIO Pin 17 angeschlossen. Außerdem benötigt der Empfänger eine 3,3 Volt Stromversorgung und einen Masseanschluss. 
+
+\subsection{Software}
+Damit das von der Fernbedienung empfangene Signal zuverlässig dekodiert werden kann setzen wir den Treiber LIRC ein.
+\subsubsection{LIRC}
+LIRC ist die Abkürzung für Linux Infrared Remote Control. Mit LIRC kann man Signale, die per Infrarot empfangen werden in Programmbefehle übersetzen.
+\newline
+Als erstes muss lirc auf dem Raspberry installiert werden. Dafür gibt es den Befehl:
+\newline
+"`sudo apt-get install lirc"'
+\newline
+Ist der Treiber installiert, muss er geladen werden. Dabei muss der GPIO Pin angegeben werden, an dem der Infrarot-Empfänger angeschlossen ist.
+\newline
+"`sudo modprobe lirc\_rpi gpio\_in\_pin=17"'
+\newline
+Damit der Treiber beim booten automatisch geladen wird, muss er in der Datei "`/etc/modules"' eingetragen werden.
+\newline
+\newline
+Man könnte den Empfänger jetzt schon testen, da es aber noch keine fernbedienungsspezifische Konfigurationsdatei gibt, werden nur wirre Zeichen angezeigt.
+Deshalb legen wir als nächstes die Konfigurationsdatei für unsere Fernbedienung vom Typ "`Apple A1156"' an.
+
+\begin{lstlisting}[label=infra_config,caption=Fernbedienung Konfiguration]
+# this config file was automatically generated
+# using lirc-0.8.1(iguanaIR) on Fri Mar 30 19:20:40 2007
+#
+# contributed by Matthias Urlichs <matthias|urlichs.de>
+#
+# brand:                       Apple
+# model no. of remote control: A1156
+# devices being controlled by this remote: new (late 2006) MacBook
+#
+# This config files are for non-Apple receivers only.
+# Use the lircd.conf.macmini file when you are using the Apple receiver.
+# 
+
+begin remote
+  name  Apple_A1156
+  bits            8
+  flags SPACE_ENC
+  eps            30
+  aeps          100
+
+  header       9065  4484
+  one           574  1668
+  zero          574   547
+  ptrail        567
+  repeat       9031  2242
+  pre_data_bits   16
+  pre_data       0x77E1
+  post_data_bits  8
+  post_data      0xC5
+  gap          37600
+  toggle_bit      0
+  ignore_mask 0x80ff
+
+      begin codes
+          play                     0x20
+          plus                     0xD0
+          ffwd                     0xE0
+          rev                      0x10
+          minus                    0xB0
+          menu                     0x40
+      end codes
+
+end remote
+\end{lstlisting}
+
+Sie wird in der Datei "`/etc/lirc/lircd.conf"' gespeichert.
+\newline
+Nun kann die Fernbedienung und der Empfänger mit dem Programm "`irw"' getestet werden. Es werden jetzt die Befehle angezeigt, die in der Konfigurationsdatei definiert worden sind.
+
+Konfigurationsdateien für viele Fernbedienungen gibt es unter
+http://lirc.sourceforge.net/remotes/
+\newline
+\newline
+LIRC stellt auch eine Bibliothek zur Einbindung in eigene Programme bereit. Dazu muss die "`lirc\_client.h"' eingebunden werden.
+\newline
+\newline
+Nun kann nach der Initialisierung von LIRC der aktuelle Befehl mit "`lirc\_nextcode()"' empfangen werden.
+\begin{lstlisting}[label=infra_quellcode,caption=LIRC Programmierung]
+//Initialisierung
+struct lirc_config *config;
+lirc_init("irexec",1);
+lirc_readconfig(NULL,&config,NULL)
+
+char *code;
+char *c;
+
+//Befehl holen
+while(lirc_nextcode(&code)==0)
+{
+	lirc_code2char(config,code,&c))
+	system(c);
+	free(code);
+ }
+ lirc_freeconfig(config);
+\end{lstlisting}
