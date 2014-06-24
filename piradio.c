@@ -8,6 +8,13 @@
 #include "rotaryencoder.h"
 #include "radio.h"
 #include <time.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 struct encoder *encoder;
 int radiostation = 0;
@@ -33,9 +40,49 @@ char * getTime()
 
 
 
+void info_action(menu_item* item)
+{
+	int fd;
+	struct ifreq ifr;
+
+	fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+	/* I want to get an IPv4 IP address */
+	ifr.ifr_addr.sa_family = AF_INET;
+
+	/* I want IP address attached to "eth0" */
+	strncpy(ifr.ifr_name, "eth0", IFNAMSIZ-1);
+
+	ioctl(fd, SIOCGIFADDR, &ifr);
+
+	close(fd);
+
+	/* display result */
+	printf("%s\n", inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+
+	lcd_display_clear();
+	lcd_line_print(LINE1, inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+
+	while(1)
+	{
+		//Menü aufrufen
+		if(getButtonPressed(encoder)==1)
+		{
+			menu_draw();
+			break;
+		}
+		delay(100);
+	}
+
+}
+
 void quit_action(menu_item* item)
 {
 	printInfo(item->text);
+	lcd_display_clear();
+	lcd_line_print(LINE1, "System wird");
+	lcd_line_print(LINE2, "heruntergefahren!");
+	stop_mpd();
 	system("init 0");
 }
 
@@ -43,7 +90,7 @@ void start_action(menu_item* item)
 {
 	printInfo(item->text);
 	start_mpd();
-	//now_playing();
+	now_playing();
 }
 
 void change_action(menu_item* item)
@@ -53,18 +100,21 @@ void change_action(menu_item* item)
 	{
 		radiostation=1;
 		change_radiostation(radiostation);
+		now_playing();
 		return;
 	}
 	if(radiostation==1)
 	{
 		radiostation=2;
 		change_radiostation(radiostation);
+		now_playing();
 		return;
 	}
 	if(radiostation==2)
 	{
 		radiostation=0;
 		change_radiostation(radiostation);
+		now_playing();
 		return;
 	}
 }
@@ -75,8 +125,9 @@ void stop_action(menu_item* item)
 	stop_mpd();
 }
 
-void now_playing(menu_item* item)
+void now_playing()
 {
+	delay(500);
 
 	//LCD Clear
 	lcd_display_clear();
@@ -84,8 +135,18 @@ void now_playing(menu_item* item)
 
 	lcd_line_print(LINE1, get_current_station(radiostation));
 
+
 	char *title = get_current_songtitle();
+
+	while(!title)
+	{
+		delay(100);
+		printf("zeiger nicht da");
+		title = get_current_songtitle();
+	}
+
 	lcd_line_print(LINE2, title);
+
 
 
 	char *timenow = getTime();
@@ -98,6 +159,7 @@ void now_playing(menu_item* item)
 
 	while(1)
 	{
+
 		//aktuellen Titel ausgeben, wenn er sich geändert hat:
 		if((strcmp(title,get_current_songtitle()) != 0))
 		{
@@ -106,8 +168,15 @@ void now_playing(menu_item* item)
 			lcd_line_clear(LINE2);
 			title = get_current_songtitle();
 			printf("%s\n", title);
+			while(!title)
+			{
+				delay(100);
+				printf("zeiger nicht da-loop");
+				title = get_current_songtitle();
+			}
 			lcd_line_print(LINE2, title);
 		}
+
 
 		//aktuelle Uhrzeit ausgeben, wenn sie sich geändert hat
 		if((strcmp(timenow,getTime()) != 0))
@@ -118,6 +187,7 @@ void now_playing(menu_item* item)
 			printf("%s\n", timenow);
 			lcd_line_print(LINE4, timenow);
 		}
+
 
 
 
@@ -138,6 +208,7 @@ void now_playing(menu_item* item)
 			break;
 		}
 		delay(100);
+
 
 	}
 	free(title);
@@ -192,7 +263,8 @@ int main(int argc, char **argv)
 	menu_item_add_subitem(item_main_menu, create_menu_item("Start", start_action, 0));
 	menu_item_add_subitem(item_main_menu, create_menu_item("Stop", stop_action, 0));
 	menu_item_add_subitem(item_main_menu, create_menu_item("Sender wechseln", change_action, 0));
-	menu_item_add_subitem(item_main_menu, create_menu_item("Zurueck", now_playing, 0));
+	//menu_item_add_subitem(item_main_menu, create_menu_item("Zurueck", now_playing, 0));
+	menu_item_add_subitem(item_main_menu, create_menu_item("Info", info_action, 0));
 	menu_item_add_subitem(item_main_menu, create_menu_item("Beenden", quit_action, 0));
 
 	printDebug("Zeichne Menue...");

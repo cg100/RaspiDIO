@@ -20,7 +20,7 @@ void updateEncoders()
 
 	encoder->lastEncoded = encoded;
         if(sum == 0b1101 /**|| sum == 0b0100 || sum == 0b0010 || sum == 0b1011**/) encoder->direction=DIR_RIGHT;
-        if(sum == 0b1110 /**|| sum == 0b0111 || sum == 0b0001 || sum == 0b0001**/) encoder->direction=DIR_LEFT;
+        if(sum == 0b1110 /**|| sum == 0b0111 || sum == 0b0001 || sum == 0b1000**/) encoder->direction=DIR_LEFT;
 }
 
 void updateButton()
